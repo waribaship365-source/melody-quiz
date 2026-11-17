@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="発車メロディクイズ">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<title>発車メロディクイズ</title>
+<style>
+
+:root{--navy:#172b45;--navy2:#244568;--ink:#172334;--muted:#667085;--line:#d9e1eb;--panel:#f1f4f8;--blue:#2874bd;--red:#e9445d;--green:#25834a}
+*{box-sizing:border-box}
+body{margin:0;padding:0 0 24px;color:var(--ink);background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;text-align:center;touch-action:manipulation}
+h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;letter-spacing:.02em}
+.mode-switch{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px auto;padding:0 12px}
+.mode-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:7px;padding:9px 15px;font-size:.92rem;font-weight:650}
+.mode-btn.active{background:var(--navy);border-color:var(--navy);color:#fff}
+#offlineStatus{padding:0 12px;color:var(--muted)!important;font-size:.78rem!important;margin:0 0 10px!important}
+.setup-box{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 18px 12px;padding:12px 14px;background:var(--panel);border-radius:9px;text-align:left}
+.setup-box p{margin:0 0 7px!important;font-size:.9rem!important;color:var(--ink)}
+.setup-box input[type=file]{display:block;max-width:100%;color:var(--ink);font-size:.88rem}
+#trackInfo{margin-top:6px!important;color:var(--muted)!important;font-size:.8rem!important}
+.btn-shuffle-small{flex:0 0 auto;border:1px solid #c9d7e7;border-radius:7px;background:#fff;color:var(--blue);padding:9px 11px;font-size:.85rem;font-weight:650;cursor:pointer;white-space:nowrap}
+.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 14px 12px}
+.btn-ctrl{border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);padding:10px 14px;margin:0;font-size:.9rem;font-weight:650;cursor:pointer}
+#btn-play{background:var(--navy);border-color:var(--navy);color:#fff}
+#btn-next{background:#eef4fa;color:var(--blue)}
+#status{margin:10px 18px;padding:13px 12px;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:8px;background:var(--navy2);color:#fff;font-size:1.08rem;font-weight:700;line-height:1.4}
+#streakInfo{margin:0 18px 12px;padding:8px 10px;border-radius:7px;background:#f5f7fa;color:var(--navy);font-size:.92rem;font-weight:650}
+.buzzers{display:flex;justify-content:center;margin:12px 18px}
+.btn-buzzer{width:100%;max-width:520px;min-height:68px;padding:12px;border:0;border-radius:9px;color:#fff;background:var(--red);font-size:1.45rem;font-weight:750;cursor:pointer;box-shadow:none}
+.btn-buzzer:active{filter:brightness(.94);transform:translateY(1px)}
+.btn-buzzer:disabled{opacity:.45;pointer-events:none}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:700px;margin:0 auto 18px;padding:0 16px}
+.btn-choice{padding:15px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:1rem;font-weight:650}
+.btn-choice:active{background:#eef4fa}
+.btn-choice:disabled{opacity:.65}
+.route-choices{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:12px 18px 18px}
+.route-choice{position:relative;min-width:0;min-height:124px;padding:9px 5px 8px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:.88rem;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;overflow-wrap:anywhere;cursor:pointer}
+.route-choice img{display:block;width:76px;height:68px;max-width:90%;object-fit:contain;border-radius:3px}
+.route-choice .route-fallback{display:flex;align-items:center;justify-content:center;width:76px;height:68px;font-size:44px;line-height:1}
+.route-choice .route-id{position:absolute;top:5px;left:7px;color:#687386;font-size:.68rem;font-weight:500;line-height:1}
+.route-choice .route-name{line-height:1.2;font-size:clamp(.68rem,1.25vw,.88rem)}
+.route-choice:disabled{opacity:1;cursor:default}
+.route-choice.correct{border:2px solid var(--green);background:#edf8f0}
+.route-choice.wrong{border:2px solid var(--red);background:#fff0f1}
+.hidden{display:none!important}
+@media(max-width:700px){.setup-box{margin-left:10px;margin-right:10px;padding:10px}.route-choices{margin-left:10px;margin-right:10px;gap:6px}.route-choice{min-height:105px;padding:8px 3px 6px}.route-choice img,.route-choice .route-fallback{width:62px;height:58px}.route-choice .route-name{font-size:.7rem}}
+@media(max-width:520px){.route-choices{grid-template-columns:repeat(3,minmax(0,1fr))}.route-choice{min-height:112px}.route-choice .route-name{font-size:.82rem}.setup-box{align-items:flex-start;flex-direction:column}.btn-shuffle-small{align-self:flex-end}}
+
+</style>
+</head>
+<body>
+
+  <h1>発車メロディ早押し練習</h1>
+  <div class="mode-switch" aria-label="クイズモード">
+    <button id="mode-four" class="mode-btn active" type="button">4択モード</button>
+    <button id="mode-routes" class="mode-btn" type="button">34路線モード</button>
+  </div>
+  <div id="offlineStatus" role="status" style="font-size:0.85rem;color:#b8e6c1;margin:0 0 12px;">オフライン利用の準備状況を確認しています…</div>
+
+  <!-- 1. 音源ファイル選択 -->
+  <div class="setup-box">
+    <p style="margin:0 0 8px 0; font-size:0.9rem;">音源ファイルを複数選択してください（34路線モードでは番号3桁のMP3を選択）</p>
+    <input type="file" id="audioFiles" accept="audio/*,.mp3" multiple>
+    <div><button id="btn-shuffle" class="btn-shuffle-small">🔀 出題順シャッフル</button></div>
+    <div id="trackInfo" style="margin-top:8px; font-size:0.9rem; color:#aaa;">未選択</div>
+  </div>
+
+  <!-- 2. 進行ボタン -->
+  <div class="controls">
+    <button id="btn-play" class="btn-ctrl">▶ 最初から再生</button>
+    <button id="btn-resume" class="btn-ctrl">↻ 続きから再生</button>
+    <button id="btn-next" class="btn-ctrl">⏭ 次の曲を再生</button>
+  </div>
+
+  <!-- 3. 判定結果表示 -->
+  <div id="status">音源を選択して「最初から再生」を押してください</div>
+  <div id="streakInfo" aria-live="polite">🔥 連続正解：0問</div>
+
+  <!-- 4. 早押しボタン -->
+  <div class="buzzers" id="buzzerArea">
+    <button id="btn-wakatta" class="btn-buzzer" disabled>わかった！<br><span style="font-size:0.9rem;">[スペースキー]</span></button>
+  </div>
+
+  <!-- 5. 回答エリア -->
+  <div class="choices hidden" id="choicesArea"></div>
+  <div class="route-choices hidden" id="routeChoicesArea"></div>
+
+  <audio id="player" preload="metadata" playsinline></audio>
+
+<script>
+  const fileInput = document.getElementById('audioFiles');
+  const trackInfo = document.getElementById('trackInfo');
+  const player = document.getElementById('player');
+  const statusEl = document.getElementById('status');
+  
+  const btnPlay = document.getElementById('btn-play');
+  const btnResume = document.getElementById('btn-resume');
+  const btnNext = document.getElementById('btn-next');
+  const btnShuffle = document.getElementById('btn-shuffle');
+  const streakInfo = document.getElementById('streakInfo');
+  const btnWakatta = document.getElementById('btn-wakatta');
+  const buzzerArea = document.getElementById('buzzerArea');
+  const choicesArea = document.getElementById('choicesArea');
+
+  let tracks = [];
+  let currentIndex = 0;
+  let isLocked = true;
+  let startTime = 0;
+  let currentObjectUrl = null;
+  let streak = 0;
+  let quizMode = 'four';
+  const routeChoicesArea = document.getElementById('routeChoicesArea');
+  const modeFourBtn = document.getElementById('mode-four');
+  const modeRoutesBtn = document.getElementById('mode-routes');
+  const ROUTES = [('001', '京葉線'), ('002', '武蔵野線'), ('003', '中央・総武緩行線'), ('006', '埼京・川越線'), ('007', '京浜東北・根岸線'), ('009', '高崎線'), ('010', '山手線'), ('011', '常磐緩行線'), ('012', '中央本線'), ('013', '常磐線'), ('014', '南武線'), ('015', '横須賀・総武快速線'), ('016', '中央快速線'), ('017', '横浜線'), ('018', '湘南新宿ライン'), ('019', '鶴見線'), ('020', '伊東線'), ('021', '東海道・宇都宮線'), ('022', '内房線'), ('023', '小海線'), ('025', '上越線'), ('026', '信越本線'), ('027', '外房線'), ('028', '両毛線'), ('031', '水郡線'), ('036', '磐越東線'), ('038', '吾妻線'), ('039', '総武本線'), ('042', '成田線'), ('044', '東金線'), ('047', '鹿島線'), ('101', '東北新幹線'), ('102', '上越新幹線'), ('105', '北陸新幹線')];
+  const routeById = new Map(ROUTES.map(([id, name]) => [id, name]));
+  function routeIdFromFilename(filename) {
+    const match = filename.match(/^(\d{3})\.(mp3|m4a|wav|aac|ogg)$/i);
+    return match ? match[1] : null;
+  }
+  function setMode(mode) {
+    quizMode = mode;
+    modeFourBtn.classList.toggle('active', mode === 'four');
+    modeRoutesBtn.classList.toggle('active', mode === 'routes');
+    if (mode === 'routes') {
+      fileInput.setAttribute('aria-label', '番号3桁の音源ファイルを選択');
+      statusEl.textContent = '34路線モードです。001.mp3など番号3桁の音源を選択してください';
+      choicesArea.classList.add('hidden');
+    } else {
+      statusEl.textContent = '4択モードです。音源を選択してください';
+      routeChoicesArea.classList.add('hidden');
+    }
+    if (tracks.length) loadTrack(currentIndex);
+  }
+  modeFourBtn.addEventListener('click', () => setMode('four'));
+  modeRoutesBtn.addEventListener('click', () => setMode('routes'));
+
+  // ファイル名から拡張子を省く関数
+  function getCleanName(filename) {
+    return filename.replace(/\.[^/.]+$/, "");
+  }
+
+  // 配列をシャッフルする関数（Fisher-Yates）
+  function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // 音源ファイル選択時
+  fileInput.addEventListener('change', (e) => {
+    const selected = Array.from(e.target.files || []);
+    if (selected.length === 0) {
+      trackInfo.textContent = "ファイルが選択されていません";
+      statusEl.textContent = "音源ファイルを選択してください";
+      return;
+    }
+
+    if (quizMode === 'routes') {
+      const found = new Set(selected.map(f => routeIdFromFilename(f.name)).filter(Boolean));
+      const missing = ROUTES.filter(([id]) => !found.has(id)).map(([id]) => id);
+      const invalid = selected.filter(f => !routeIdFromFilename(f.name));
+      if (invalid.length) {
+        alert('34路線モードでは音源ファイル名を001.mp3のような3桁番号にしてください。');
+        return;
+      }
+      if (missing.length) {
+        const proceed = confirm(`登録34路線のうち${missing.length}路線の音源がありません（${missing.join(', ')}）。選択済みの音源だけで続けますか？`);
+        if (!proceed) return;
+      }
+      selected.sort((a,b) => routeIdFromFilename(a.name).localeCompare(routeIdFromFilename(b.name)));
+    }
+    tracks = selected;
+    currentIndex = 0;
+    loadTrack(currentIndex);
+    statusEl.style.background = "#0f3460";
+    statusEl.textContent = quizMode === 'routes'
+      ? `${tracks.length}曲の音源を読み込みました。「最初から再生」を押してください`
+      : `${tracks.length}曲を選択しました。「最初から再生」を押してください`;
+  });
+
+  // 曲をセットする（読み込み完了を待たず、ブラウザに読み込みを開始させる）
+  function loadTrack(index) {
+    const file = tracks[index];
+    if (!file) return;
+
+    player.pause();
+    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = URL.createObjectURL(file);
+    player.src = currentObjectUrl;
+    player.load();
+
+    trackInfo.textContent = `全${tracks.length}曲中 ${index + 1}曲目`;
+
+    isLocked = true;
+    btnWakatta.disabled = true;
+    buzzerArea.classList.remove('hidden');
+    choicesArea.classList.add('hidden');
+    choicesArea.innerHTML = '';
+    routeChoicesArea.classList.add('hidden');
+    routeChoicesArea.innerHTML = '';
+  }
+
+  // 音声のメタデータが読み込まれたら、早押しボタンを有効化
+  player.addEventListener('loadedmetadata', () => {
+    btnWakatta.disabled = false;
+  });
+
+  player.addEventListener('error', () => {
+    const err = player.error;
+    const detail = err ? `（エラーコード ${err.code}）` : '';
+    statusEl.style.background = "#9b1c1c";
+    statusEl.textContent = `音声を読み込めません。MP3ファイルか確認してください ${detail}`;
+    trackInfo.textContent += " — 読み込みエラー";
+  });
+
+  // 再生開始処理
+  function startPlayback(fromBeginning = true) {
+    if (tracks.length === 0) return alert("先に音源ファイルを選択してください");
+
+    // メタデータ読み込み前は currentTime を変更できない場合があるため、例外を回避
+    if (fromBeginning) {
+      if (player.readyState > 0) {
+        try { player.currentTime = 0; } catch (err) { console.warn(err); }
+      }
+      startTime = performance.now();
+    }
+
+    // iOSではユーザー操作に直接応じてplay()を呼ぶ必要がある
+    let playResult;
+    try {
+      playResult = player.play();
+    } catch (err) {
+      statusEl.textContent = `再生を開始できませんでした：${err.message}`;
+      return;
+    }
+
+    isLocked = false;
+    btnWakatta.disabled = false;
+    buzzerArea.classList.remove('hidden');
+    choicesArea.classList.add('hidden');
+    routeChoicesArea.classList.add('hidden');
+    statusEl.style.background = "#0f3460";
+    statusEl.textContent = "🎵 再生中... わかったらボタンを押してください！";
+
+    if (playResult && typeof playResult.catch === 'function') {
+      playResult.catch((err) => {
+        isLocked = true;
+        statusEl.style.background = "#9b1c1c";
+        statusEl.textContent = `再生できませんでした（${err.name || 'エラー'}）。Safariで開き、もう一度再生してください。`;
+        console.error('Audio play error:', err);
+      });
+    }
+  }
+
+  // ▶ 最初から再生
+  btnPlay.addEventListener('click', () => startPlayback(true));
+
+  // ↻ 続きから再生
+  btnResume.addEventListener('click', () => startPlayback(false));
+
+  // ⏭ 次の曲をセットして、そのまま自動再生
+  btnNext.addEventListener('click', () => {
+    if (tracks.length === 0) return;
+    currentIndex = (currentIndex + 1) % tracks.length;
+    loadTrack(currentIndex);
+    startPlayback(true);
+  });
+
+  // 出題順をシャッフルして、先頭の曲から再開
+  btnShuffle.addEventListener('click', () => {
+    if (tracks.length === 0) {
+      alert("先に音源ファイルを選択してください");
+      return;
+    }
+    tracks = shuffle(tracks);
+    currentIndex = 0;
+    loadTrack(currentIndex);
+    statusEl.style.background = "#0f3460";
+    statusEl.textContent = "出題順をシャッフルしました。最初の曲をセットしました";
+  });
+
+  // 「わかった！」押下時の処理
+  function onWakatta() {
+    if (isLocked) return;
+    isLocked = true;
+    player.pause();
+
+    const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+    statusEl.style.background = "#d97706"; // オレンジ色
+    statusEl.textContent = `⏱ タイム: ${elapsed}秒！ 曲名を選んでください`;
+
+    // 早押しボタンを隠して4択を表示
+    buzzerArea.classList.add('hidden');
+    if (quizMode === 'routes') generateRouteChoices();
+    else generateChoices();
+  }
+
+  // 4択生成処理
+  function generateChoices() {
+    choicesArea.innerHTML = '';
+    const correctName = getCleanName(tracks[currentIndex].name);
+    
+    // 正解以外のファイル名を抽出（重複排除）
+    const otherNames = [...new Set(
+      tracks
+        .map(t => getCleanName(t.name))
+        .filter(name => name !== correctName)
+    )];
+
+    // ダミー選択肢を最大3つランダム取得
+    const dummies = shuffle(otherNames).slice(0, 3);
+    
+    // 正解とダミーを混ぜてシャッフル
+    const options = shuffle([correctName, ...dummies]);
+
+    options.forEach(optionName => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-choice';
+      btn.textContent = optionName;
+      btn.addEventListener('click', () => checkAnswer(optionName, correctName));
+      choicesArea.appendChild(btn);
+    });
+
+    choicesArea.classList.remove('hidden');
+  }
+
+  // 34路線の固定選択肢
+  function generateRouteChoices() {
+    routeChoicesArea.innerHTML = '';
+    const correctId = routeIdFromFilename(tracks[currentIndex].name);
+    if (!correctId || !routeById.has(correctId)) {
+      statusEl.style.background = '#9b1c1c';
+      statusEl.textContent = '音源名と路線番号が対応していません。例：001.mp3';
+      return;
+    }
+    ROUTES.forEach(([id, name]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'route-choice';
+      const img = document.createElement('img');
+      img.src = `./icons/${id}.png`;
+      img.alt = '';
+      img.onerror = () => { img.replaceWith(Object.assign(document.createElement('span'), {className:'route-fallback', textContent:'🚃'})); };
+      const number = document.createElement('span');
+      number.className = 'route-id';
+      number.textContent = id;
+      const label = document.createElement('span');
+      label.className = 'route-name';
+      label.textContent = name;
+      btn.append(number, img, label);
+      btn.addEventListener('click', () => checkRouteAnswer(id, correctId));
+      routeChoicesArea.appendChild(btn);
+    });
+    routeChoicesArea.classList.remove('hidden');
+  }
+
+  function checkRouteAnswer(selectedId, correctId) {
+    const buttons = routeChoicesArea.querySelectorAll('button');
+    buttons.forEach(b => { b.disabled = true; });
+    const selected = routeChoicesArea.querySelectorAll('button');
+    const index = ROUTES.findIndex(([id]) => id === selectedId);
+    const correctName = routeById.get(correctId);
+    if (selectedId === correctId) {
+      streak += 1;
+      streakInfo.textContent = `🔥 連続正解：${streak}問`;
+      statusEl.style.background = '#2b580c';
+      statusEl.textContent = `⭕ 正解！ ${correctName}`;
+      buttons[index]?.classList.add('correct');
+    } else {
+      streak = 0;
+      streakInfo.textContent = '🔥 連続正解：0問';
+      statusEl.style.background = '#9b1c1c';
+      statusEl.textContent = `❌ 残念！ 正解は「${correctName}」でした`;
+      buttons[index]?.classList.add('wrong');
+      const correctIndex = ROUTES.findIndex(([id]) => id === correctId);
+      buttons[correctIndex]?.classList.add('correct');
+    }
+  }
+
+  // 正誤判定処理
+  function checkAnswer(selectedName, correctName) {
+    // 4択ボタンを無効化（二重押し防止）
+    routeChoicesArea.classList.add('hidden');
+    const buttons = choicesArea.querySelectorAll('button');
+    buttons.forEach(b => b.disabled = true);
+
+    if (selectedName === correctName) {
+      streak += 1;
+      streakInfo.textContent = `🔥 連続正解：${streak}問`;
+      statusEl.style.background = "#2b580c"; // 緑色
+      statusEl.innerHTML = `⭕ 正解！<br><span style="font-size:1.1rem;">${correctName}</span>`;
+    } else {
+      streak = 0;
+      streakInfo.textContent = "🔥 連続正解：0問";
+      statusEl.style.background = "#9b1c1c"; // 赤色
+      statusEl.innerHTML = `❌ 残念！<br><span style="font-size:1.1rem;">正解は「${correctName}」でした</span>`;
+    }
+  }
+
+  // タッチ・クリックイベント
+  btnWakatta.addEventListener('pointerdown', onWakatta);
+
+  // スペースキーでも「わかった！」を押せるように対応
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && !isLocked) {
+      e.preventDefault(); // 画面スクロール防止
+      onWakatta();
+    }
+  });
+</script>
+
+<script>
+  // HTTPSで初回に読み込んだ際、アプリ本体を端末へ保存してオフライン利用に備える
+  (async function setupOfflineSupport() {
+    const status = document.getElementById('offlineStatus');
+    if (!('serviceWorker' in navigator)) {
+      status.textContent = 'このブラウザではオフライン保存に対応していません';
+      status.style.color = '#ffd08a';
+      return;
+    }
+    if (!/^https?:$/.test(location.protocol) || location.hostname === 'localhost') {
+      status.textContent = 'オフライン保存にはHTTPSで開く必要があります';
+      status.style.color = '#ffd08a';
+      return;
+    }
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+      await navigator.serviceWorker.ready;
+      // SWがこのページを制御するまで少し待つ。初回アクセス時は次回起動から確実に制御される。
+      if (navigator.serviceWorker.controller) {
+        status.textContent = '✓ オフライン利用の準備ができています';
+      } else {
+        status.textContent = '✓ 保存しました。Safariでこのページを一度再読み込みしてください';
+      }
+      status.style.color = '#9be7a5';
+      reg.update().catch(() => {});
+    } catch (err) {
+      status.textContent = 'オフライン保存に失敗しました。ネット接続を確認してください';
+      status.style.color = '#ffaaaa';
+      console.error('Service Worker registration failed:', err);
+    }
+  })();
+</script>
+
+</body>
+</html>
