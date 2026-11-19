@@ -1,4 +1,4 @@
-const CACHE_NAME = 'solo-quiz-34route-flat-v4';
+const CACHE_NAME = 'solo-quiz-34route-practice-v5';
 const CORE_ASSETS = [
   './',
   './index.html',

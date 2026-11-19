@@ -16,21 +16,21 @@
 *{box-sizing:border-box}
 body{margin:0;padding:0 0 24px;color:var(--ink);background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;text-align:center;touch-action:manipulation}
 h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;letter-spacing:.02em}
-.mode-switch{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px auto;padding:0 12px}
-.mode-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:7px;padding:9px 15px;font-size:.92rem;font-weight:650}
+.mode-switch{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px auto;padding:0 8px}
+.mode-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:7px;padding:8px 12px;font-size:.86rem;font-weight:650}
 .mode-btn.active{background:var(--navy);border-color:var(--navy);color:#fff}
 #offlineStatus{padding:0 12px;color:var(--muted)!important;font-size:.78rem!important;margin:0 0 10px!important}
-.setup-box{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 18px 12px;padding:12px 14px;background:var(--panel);border-radius:9px;text-align:left}
+.setup-box{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 10px 8px;padding:8px 10px;background:var(--panel);border-radius:8px;text-align:left}
 .setup-box p{margin:0 0 7px!important;font-size:.9rem!important;color:var(--ink)}
 .setup-box input[type=file]{display:block;max-width:100%;color:var(--ink);font-size:.88rem}
 #trackInfo{margin-top:6px!important;color:var(--muted)!important;font-size:.8rem!important}
 .btn-shuffle-small{flex:0 0 auto;border:1px solid #c9d7e7;border-radius:7px;background:#fff;color:var(--blue);padding:9px 11px;font-size:.85rem;font-weight:650;cursor:pointer;white-space:nowrap}
-.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 14px 12px}
-.btn-ctrl{border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);padding:10px 14px;margin:0;font-size:.9rem;font-weight:650;cursor:pointer}
+.controls{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:0 8px 8px}
+.btn-ctrl{border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);padding:8px 10px;margin:0;font-size:.82rem;font-weight:650;cursor:pointer}
 #btn-play{background:var(--navy);border-color:var(--navy);color:#fff}
 #btn-next{background:#eef4fa;color:var(--blue)}
-#status{margin:10px 18px;padding:13px 12px;min-height:54px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:8px;background:var(--navy2);color:#fff;font-size:1.08rem;font-weight:700;line-height:1.4}
-#streakInfo{margin:0 18px 12px;padding:8px 10px;border-radius:7px;background:#f5f7fa;color:var(--navy);font-size:.92rem;font-weight:650}
+#status{margin:7px 10px;padding:8px 10px;min-height:42px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:8px;background:var(--navy2);color:#fff;font-size:1.08rem;font-weight:700;line-height:1.4}
+#streakInfo{margin:0 10px 7px;padding:6px 8px;border-radius:7px;background:#f5f7fa;color:var(--navy);font-size:.92rem;font-weight:650}
 .buzzers{display:flex;justify-content:center;margin:12px 18px}
 .btn-buzzer{width:100%;max-width:520px;min-height:68px;padding:12px;border:0;border-radius:9px;color:#fff;background:var(--red);font-size:1.45rem;font-weight:750;cursor:pointer;box-shadow:none}
 .btn-buzzer:active{filter:brightness(.94);transform:translateY(1px)}
@@ -39,18 +39,22 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
 .btn-choice{padding:15px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:1rem;font-weight:650}
 .btn-choice:active{background:#eef4fa}
 .btn-choice:disabled{opacity:.65}
+.btn-choice.choice-with-icon{display:flex;align-items:center;justify-content:flex-start;gap:8px;text-align:left;min-height:76px}
+.btn-choice.choice-with-icon img,.choice-fallback{width:52px;height:48px;object-fit:contain;flex:0 0 52px}
+.choice-fallback{display:flex;align-items:center;justify-content:center;font-size:30px}
+.practice-playing{outline:3px solid var(--blue);background:#eef5fc}
 .route-choices{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:12px 18px 18px}
-.route-choice{position:relative;min-width:0;min-height:124px;padding:9px 5px 8px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:.88rem;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;overflow-wrap:anywhere;cursor:pointer}
-.route-choice img{display:block;width:76px;height:68px;max-width:90%;object-fit:contain;border-radius:3px}
-.route-choice .route-fallback{display:flex;align-items:center;justify-content:center;width:76px;height:68px;font-size:44px;line-height:1}
+.route-choice{position:relative;min-width:0;min-height:106px;padding:7px 3px 6px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:.88rem;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;overflow-wrap:anywhere;cursor:pointer}
+.route-choice img{display:block;width:66px;height:58px;max-width:90%;object-fit:contain;border-radius:3px}
+.route-choice .route-fallback{display:flex;align-items:center;justify-content:center;width:66px;height:58px;font-size:44px;line-height:1}
 .route-choice .route-id{position:absolute;top:5px;left:7px;color:#687386;font-size:.68rem;font-weight:500;line-height:1}
 .route-choice .route-name{line-height:1.2;font-size:clamp(.68rem,1.25vw,.88rem)}
 .route-choice:disabled{opacity:1;cursor:default}
 .route-choice.correct{border:2px solid var(--green);background:#edf8f0}
 .route-choice.wrong{border:2px solid var(--red);background:#fff0f1}
 .hidden{display:none!important}
-@media(max-width:700px){.setup-box{margin-left:10px;margin-right:10px;padding:10px}.route-choices{margin-left:10px;margin-right:10px;gap:6px}.route-choice{min-height:105px;padding:8px 3px 6px}.route-choice img,.route-choice .route-fallback{width:62px;height:58px}.route-choice .route-name{font-size:.7rem}}
-@media(max-width:520px){.route-choices{grid-template-columns:repeat(3,minmax(0,1fr))}.route-choice{min-height:112px}.route-choice .route-name{font-size:.82rem}.setup-box{align-items:flex-start;flex-direction:column}.btn-shuffle-small{align-self:flex-end}}
+@media(max-width:700px){.setup-box{margin-left:8px;margin-right:8px;padding:7px}.route-choices{margin:8px;gap:5px}.route-choice{min-height:92px;padding:6px 2px 5px}.route-choice img,.route-choice .route-fallback{width:52px;height:48px}.route-choice .route-name{font-size:.68rem}.route-choice .route-id{top:3px;left:4px;font-size:.6rem}}
+@media(max-width:520px){.route-choices{grid-template-columns:repeat(5,minmax(0,1fr))}.route-choice{min-height:84px;gap:3px}.route-choice img,.route-choice .route-fallback{width:42px;height:40px}.route-choice .route-fallback{font-size:30px}.route-choice .route-name{font-size:clamp(.55rem,2.3vw,.7rem)}.setup-box{align-items:flex-start;flex-direction:column}.btn-shuffle-small{align-self:flex-end}.choices{gap:6px;padding:0 8px}.btn-choice{padding:7px 5px;font-size:.82rem}}
 
 </style>
 </head>
@@ -60,6 +64,7 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
   <div class="mode-switch" aria-label="クイズモード">
     <button id="mode-four" class="mode-btn active" type="button">4択モード</button>
     <button id="mode-routes" class="mode-btn" type="button">34路線モード</button>
+    <button id="mode-practice" class="mode-btn" type="button">練習モード</button>
   </div>
   <div id="offlineStatus" role="status" style="font-size:0.85rem;color:#b8e6c1;margin:0 0 12px;">オフライン利用の準備状況を確認しています…</div>
 
@@ -118,6 +123,8 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
   const routeChoicesArea = document.getElementById('routeChoicesArea');
   const modeFourBtn = document.getElementById('mode-four');
   const modeRoutesBtn = document.getElementById('mode-routes');
+  const modePracticeBtn = document.getElementById('mode-practice');
+  let practicePlayingId = null;
   const ROUTES = [["001", "京葉線"], ["002", "武蔵野線"], ["003", "中央・総武緩行線"], ["006", "埼京・川越線"], ["007", "京浜東北・根岸線"], ["009", "高崎線"], ["010", "山手線"], ["011", "常磐緩行線"], ["012", "中央本線"], ["013", "常磐線"], ["014", "南武線"], ["015", "横須賀・総武快速線"], ["016", "中央快速線"], ["017", "横浜線"], ["018", "湘南新宿ライン"], ["019", "鶴見線"], ["020", "伊東線"], ["021", "東海道・宇都宮線"], ["022", "内房線"], ["023", "小海線"], ["025", "上越線"], ["026", "信越本線"], ["027", "外房線"], ["028", "両毛線"], ["031", "水郡線"], ["036", "磐越東線"], ["038", "吾妻線"], ["039", "総武本線"], ["042", "成田線"], ["044", "東金線"], ["047", "鹿島線"], ["101", "東北新幹線"], ["102", "上越新幹線"], ["105", "北陸新幹線"]];
   const routeById = new Map(ROUTES.map(([id, name]) => [id, name]));
   function routeIdFromFilename(filename) {
@@ -128,18 +135,35 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
     quizMode = mode;
     modeFourBtn.classList.toggle('active', mode === 'four');
     modeRoutesBtn.classList.toggle('active', mode === 'routes');
-    if (mode === 'routes') {
+    modePracticeBtn.classList.toggle('active', mode === 'practice');
+    player.pause();
+    practicePlayingId = null;
+    if (mode === 'practice') {
       fileInput.setAttribute('aria-label', '番号3桁の音源ファイルを選択');
-      statusEl.textContent = '34路線モードです。001.mp3など番号3桁の音源を選択してください';
+      statusEl.textContent = '練習モード：路線アイコンを押すと、その路線のメロディが再生されます';
+      buzzerArea.classList.add('hidden');
       choicesArea.classList.add('hidden');
+      document.querySelector('.controls').classList.add('hidden');
+      streakInfo.classList.add('hidden');
+      generatePracticeGrid();
     } else {
-      statusEl.textContent = '4択モードです。音源を選択してください';
-      routeChoicesArea.classList.add('hidden');
+      document.querySelector('.controls').classList.remove('hidden');
+      streakInfo.classList.remove('hidden');
+      buzzerArea.classList.remove('hidden');
+      if (mode === 'routes') {
+        fileInput.setAttribute('aria-label', '番号3桁の音源ファイルを選択');
+        statusEl.textContent = '34路線モードです。001.mp3など番号3桁の音源を選択してください';
+        choicesArea.classList.add('hidden');
+      } else {
+        statusEl.textContent = '4択モードです。音源を選択してください';
+        routeChoicesArea.classList.add('hidden');
+      }
+      if (tracks.length) loadTrack(currentIndex);
     }
-    if (tracks.length) loadTrack(currentIndex);
   }
   modeFourBtn.addEventListener('click', () => setMode('four'));
   modeRoutesBtn.addEventListener('click', () => setMode('routes'));
+  modePracticeBtn.addEventListener('click', () => setMode('practice'));
 
   // ファイル名から拡張子を省く関数
   function getCleanName(filename) {
@@ -165,7 +189,7 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
       return;
     }
 
-    if (quizMode === 'routes') {
+    if (quizMode === 'routes' || quizMode === 'practice') {
       const found = new Set(selected.map(f => routeIdFromFilename(f.name)).filter(Boolean));
       const missing = ROUTES.filter(([id]) => !found.has(id)).map(([id]) => id);
       const invalid = selected.filter(f => !routeIdFromFilename(f.name));
@@ -326,7 +350,25 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
     options.forEach(optionName => {
       const btn = document.createElement('button');
       btn.className = 'btn-choice';
-      btn.textContent = optionName;
+      const matchingFile = tracks.find(t => getCleanName(t.name) === optionName);
+      const routeId = matchingFile ? routeIdFromFilename(matchingFile.name) : null;
+      if (routeId && routeById.has(routeId)) {
+        btn.classList.add('choice-with-icon');
+        const img = document.createElement('img');
+        img.src = `./icons/${routeId}.png`;
+        img.alt = '';
+        img.onerror = () => {
+          const fallback = document.createElement('span');
+          fallback.className = 'choice-fallback';
+          fallback.textContent = '🚃';
+          img.replaceWith(fallback);
+        };
+        const label = document.createElement('span');
+        label.textContent = routeById.get(routeId);
+        btn.append(img, label);
+      } else {
+        btn.textContent = optionName;
+      }
       btn.addEventListener('click', () => checkAnswer(optionName, correctName));
       choicesArea.appendChild(btn);
     });
@@ -363,6 +405,87 @@ h1{margin:0;padding:17px 18px;background:var(--navy);color:#fff;font-size:clamp(
     });
     routeChoicesArea.classList.remove('hidden');
   }
+
+  // 練習モード：34路線のアイコンを押すと該当する音源を再生
+  function generatePracticeGrid() {
+    routeChoicesArea.innerHTML = '';
+    const trackMap = new Map();
+    tracks.forEach(file => {
+      const id = routeIdFromFilename(file.name);
+      if (id && routeById.has(id)) trackMap.set(id, file);
+    });
+    ROUTES.forEach(([id, name]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'route-choice practice-choice';
+      const img = document.createElement('img');
+      img.src = `./icons/${id}.png`;
+      img.alt = '';
+      img.onerror = () => {
+        const fallback = document.createElement('span');
+        fallback.className = 'route-fallback';
+        fallback.textContent = '🚃';
+        img.replaceWith(fallback);
+      };
+      const number = document.createElement('span');
+      number.className = 'route-id';
+      number.textContent = id;
+      const label = document.createElement('span');
+      label.className = 'route-name';
+      label.textContent = name;
+      const file = trackMap.get(id);
+      if (!file) {
+        btn.disabled = true;
+        btn.title = `${name}：音源未選択`;
+        btn.style.opacity = '.38';
+      } else {
+        btn.title = `${name}を再生`;
+        btn.addEventListener('click', () => playPracticeTrack(id, file, btn));
+      }
+      btn.append(number, img, label);
+      routeChoicesArea.appendChild(btn);
+    });
+    routeChoicesArea.classList.remove('hidden');
+  }
+
+  function playPracticeTrack(id, file, clickedButton) {
+    if (practicePlayingId === id && !player.paused) {
+      player.pause();
+      practicePlayingId = null;
+      statusEl.textContent = `${routeById.get(id)}：一時停止しました`;
+      clickedButton.classList.remove('practice-playing');
+      return;
+    }
+    player.pause();
+    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = URL.createObjectURL(file);
+    player.src = currentObjectUrl;
+    player.load();
+    const buttons = routeChoicesArea.querySelectorAll('.practice-choice');
+    buttons.forEach(b => b.classList.remove('practice-playing'));
+    clickedButton.classList.add('practice-playing');
+    practicePlayingId = id;
+    currentIndex = tracks.indexOf(file);
+    trackInfo.textContent = `${routeById.get(id)}（${id}）を練習中`;
+    statusEl.textContent = `🎵 ${routeById.get(id)}（${id}）を再生中`;
+    const playPromise = player.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(err => {
+        practicePlayingId = null;
+        clickedButton.classList.remove('practice-playing');
+        statusEl.textContent = `再生できませんでした：${err.message || err.name}`;
+      });
+    }
+  }
+
+  player.addEventListener('ended', () => {
+    if (quizMode === 'practice' && practicePlayingId) {
+      const id = practicePlayingId;
+      practicePlayingId = null;
+      routeChoicesArea.querySelectorAll('.practice-choice').forEach(b => b.classList.remove('practice-playing'));
+      statusEl.textContent = `${routeById.get(id)}の再生が終わりました。別のアイコンを押してください`;
+    }
+  });
 
   function checkRouteAnswer(selectedId, correctId) {
     const buttons = routeChoicesArea.querySelectorAll('button');
